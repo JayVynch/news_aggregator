@@ -9,6 +9,7 @@ class NewsApiService
 
     public function getStory($country="us",$category='business')
     {
+        //for more options visit https://newsapi.org
         $response = Http::get("{$this->baseUrl}/", [
             'country' => $country,
             'category' => $category,

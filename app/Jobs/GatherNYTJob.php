@@ -28,8 +28,19 @@ class GatherNYTJob implements ShouldQueue
      */
     public function handle(NYTService $nytService): void
     {
-        $NYTNews = Cache::remember('newyorktimes',now()->addHours(24),fn() => $nytService->getStory());
+        $topics = [
+            'arts',
+            'home',
+            'us',
+            'world',
+            'science'
+        ];
 
-        (new MigrateNYT)($NYTNews);
+        foreach($topics as $topic){
+            $NYTNews = $nytService->getStory($topic);
+            
+            (new MigrateNYT)($NYTNews);
+        }
+        
     }
 }

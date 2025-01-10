@@ -32,8 +32,18 @@ class GatherNews implements ShouldQueue
      */
     public function handle(NewsApiService $newsApiService): void
     {
-        $newsapi = Cache::remember('newsapi_articles',now()->addHours(24),fn() => $newsApiService->getStory());
+        $topics = [
+            'business',
+            'sport',
+            'fashion'
+        ];
+
+        foreach($topics as $topic){
+            $newsapi = $newsApiService->getStory($topic);
     
-        (new MigrateNewsApi)($newsapi);
+            (new MigrateNewsApi)($newsapi);
+        }
+
+        
     }
 }

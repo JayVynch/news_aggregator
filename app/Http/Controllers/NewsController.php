@@ -39,7 +39,7 @@ class NewsController extends Controller
 
         $preference = UserPreference::query()
         ->select('id','news_id','user_ip')
-        ->with('news')->where('user_ip',request()->ip())->get();
+        ->with('news')->where('user_ip',request()->ip())->paginate();
         return UserPreferenceResource::collection($preference);
     }
 
@@ -96,7 +96,7 @@ class NewsController extends Controller
         }
 
         // remove user preference
-        UserPreference::select('news_id')->where('news_id',$request->news_id)->delete();
+        UserPreference::where('news_id',$request->news_id)->where('user_ip',$request->ip())->delete();
 
     
         return response()->json([

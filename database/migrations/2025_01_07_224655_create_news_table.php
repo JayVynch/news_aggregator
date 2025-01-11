@@ -16,7 +16,7 @@ return new class extends Migration
             $table->string('source')->index();
             $table->string('title')->index();
             $table->string('author')->nullable();
-            $table->string('url')->index();
+            $table->string('url')->index()->unique();
             $table->string('category')->nullable();
             $table->string('published_at');
             $table->text('abstract')->nullable();

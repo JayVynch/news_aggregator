@@ -30,17 +30,20 @@ class MigrateNYT
                     $story['multimedia']
                 ); 
 
-                News::insert([
-                    'source' => 'NewYorkTimes',
-                    'title' => $NYTimesDTO->title,
-                    'author' => $NYTimesDTO->author,
-                    'url' => $NYTimesDTO->url,
-                    'published_at' => $NYTimesDTO->published_at,
-                    'image' => json_encode($NYTimesDTO->images),
-                    'abstract' => $NYTimesDTO->abstract,
-                    'created_at' => now(),
-                    'updated_at' => now()
-                ]);
+                if(! News::query()->select('url')->where('url',$NYTimesDTO->url)->exists()){
+
+                    News::insert([
+                        'source' => 'NewYorkTimes',
+                        'title' => $NYTimesDTO->title,
+                        'author' => $NYTimesDTO->author,
+                        'url' => $NYTimesDTO->url,
+                        'published_at' => $NYTimesDTO->published_at,
+                        'image' => json_encode($NYTimesDTO->images),
+                        'abstract' => $NYTimesDTO->abstract,
+                        'created_at' => now(),
+                        'updated_at' => now()
+                    ]);
+                }
             } 
         }
     }

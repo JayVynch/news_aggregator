@@ -25,19 +25,23 @@ class MigrateNewsApi
                 $news['publishedAt'],
                 $news['urlToImage']
             ); 
+
+            if(! News::query()->select('url')->where('url',$newsApiDTO->url)->exists()){
+                News::insert([
+                    'source' => 'newsapi',
+                    'title' => $newsApiDTO->title,
+                    'author' => $newsApiDTO->author,
+                    'url' => $newsApiDTO->url,
+                    'published_at' => $newsApiDTO->published_at,
+                    'image' => json_encode($newsApiDTO->images),
+                    'abstract' => $newsApiDTO->description,
+                    'content' => $newsApiDTO->abstract,
+                    'created_at' => now(),
+                    'updated_at' => now()
+                ]);
+            }
         
-            News::insert([
-                'source' => 'newsapi',
-                'title' => $newsApiDTO->title,
-                'author' => $newsApiDTO->author,
-                'url' => $newsApiDTO->url,
-                'published_at' => $newsApiDTO->published_at,
-                'image' => json_encode($newsApiDTO->images),
-                'abstract' => $newsApiDTO->description,
-                'content' => $newsApiDTO->abstract,
-                'created_at' => now(),
-                'updated_at' => now()
-            ]);
+            
         }
         
     }

@@ -23,15 +23,17 @@ class MigrateTheGuardian
                 $story['webPublicationDate'],
             ); 
 
-            News::insert([
-                'source' => 'theGuardian',
-                'title' => $guardianDTO->title,
-                'url' => $guardianDTO->url,
-                'published_at' => $guardianDTO->published_at,
-                'category' => $guardianDTO->section,
-                'created_at' => now(),
-                'updated_at' => now()
-            ]);
+            if(! News::query()->select('url')->where('url',$guardianDTO->url)->exists()){
+                News::insert([
+                    'source' => 'theGuardian',
+                    'title' => $guardianDTO->title,
+                    'url' => $guardianDTO->url,
+                    'published_at' => $guardianDTO->published_at,
+                    'category' => $guardianDTO->section,
+                    'created_at' => now(),
+                    'updated_at' => now()
+                ]);
+            }
         }
     }
 }

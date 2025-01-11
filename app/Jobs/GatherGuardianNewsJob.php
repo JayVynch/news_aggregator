@@ -28,7 +28,7 @@ class GatherGuardianNewsJob implements ShouldQueue
      */
     public function handle(GuardianService $guardianService): void
     {
-        $gaurdianNews = $guardianService->getStory();
+        $gaurdianNews = Cache::remember('the_guardian', now()->addHours(5), fn() => $guardianService->getStory());
         (new MigrateTheGuardian)($gaurdianNews);
     }
 }
